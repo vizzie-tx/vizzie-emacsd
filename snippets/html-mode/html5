@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# name: html5
+# key: html5
+# --
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <!-- force use of most modern rendering engine-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>$1</title>
+    <meta name="description" content="$2">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    $3
+  </head>
+  <body>
+    $0
+  </body>
+</html>
+

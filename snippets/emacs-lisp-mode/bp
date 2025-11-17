@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: bp
+# key: bp
+# --
+;;; `(file-name-nondirectory (buffer-file-name))` --- ${1:unknown}  -*- lexical-binding: t; -*-
+
+;; Copyright (C) `(format-time-string "%Y" (current-time))` ${2:`user-full-name`}
+
+;; Author: `user-full-name` <${3:`(or user-mail-address "nobody@example.org")`}>
+;; Created: `(format-time-string "%Y-%02m-%02d" (current-time))`
+;;
+;; Commentary:
+;; $4
+;; Code:
+
+$0

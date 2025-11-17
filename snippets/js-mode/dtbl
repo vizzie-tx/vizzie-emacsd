@@ -1,0 +1,20 @@
+# -*- mode: snippet -*-
+# name: jQuery Datatable
+# key: dtbl
+# group: jQuery
+# --
+$('#vendorContact-tbl-list').dataTable({
+    "info" : ${8:false}, 
+    "processing" : ${9:true}, 
+    "paging" : ${10:true},
+    "destroy" : ${11:true}, 
+    "ajax": {
+        "url": $1,
+	"dataType" : "${2:json}",
+	"type" : "${3:GET}",
+	"cache" : false,
+	"dataSrc" : "$4",
+	"data" : ${5:{ $6 }},
+	"columns": [ $7 ],
+    }$0
+});

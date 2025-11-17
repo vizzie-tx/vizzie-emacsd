@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# name: xhtml
+# key: xhtml
+# --
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <!-- force use of most modern rendering engine-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>$1</title>
+    <meta name="description" content="$2">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1">
+    $3
+  </head>
+  <body>
+    $0
+  </body>
+</html>
+

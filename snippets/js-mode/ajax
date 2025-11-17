@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: jQuery AJAX
+# key: ajax
+# group: jQuery
+# --
+$.ajax( {
+	type: "GET",
+	cache: false,
+	url : $1,
+	data: $2,
+	dataType : "${3:json}",
+	error: function( objRequest ){
+	       $4
+	},
+	success : function(data) {
+		$0
+	});

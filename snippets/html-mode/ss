@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: ss
+# key: ss
+# --
+<link rel="stylesheet" href="${3:css/main.css}" />

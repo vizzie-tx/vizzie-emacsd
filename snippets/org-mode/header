@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: header
+# key: header
+# --
+#+title: ${1:New Document}
+#+author: ${2:Larry Daffner}
+* $0
