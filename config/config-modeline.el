@@ -63,27 +63,20 @@
 
 (defun lrd/flymake-make-indicator (type count face)
   (if count
-      (let ((fm-icon-text `((error "\u2297"
-			                       ,(all-the-icons-faicon
-				                     "times-circle" :v-adjust 0.03))
-			                (warning "\u26A0"
-				                     ,(all-the-icons-faicon
-				                       "exclamation-triangle" :v-adjust 0.03))
-			                (info "\u24d8"
-			                      ,(all-the-icons-faicon
-				                    "info" :v-adjust 0.03)))))
+      (let* ((fm-icon-text `((error "\u2297" "times-circle")
+			                (warning "\u26A0" "exclamation-triangle")
+			                (info "\u24d8" "info")))
+             (fm-indicators (cdr (assq type fm-icon-text)))
+             (fm-icon-glyph (all-the-icons-faicon (cadr fm-indicators) :v-adjust 0.03))
+             (fm-text (car fm-indicators)))
         (if (and (display-graphic-p) lrd/mode-line-fancy-icons)
-	        (concat (propertize (caddr (assq type fm-icon-text))
+	        (concat (propertize fm-icon-glyph
 		                        'face `(:foreground
 			                            ,(face-foreground face nil t)
 			                            :family
-			                            ,(all-the-icons-icon-family
-				                          (caddr (assq type fm-icon-text)))))
+			                            ,(all-the-icons-icon-family fm-icon-glyph)))
                     (propertize (format "%d" count) 'face face))
-	      (propertize
-           (format "%s:%d"
-                   (cadr (assq type fm-icon-text)) count)
-           'face face )))))
+	      (propertize (format "%s:%d" fm-text count) 'face face )))))
 
 (defvar-local lrd/mode-line-flymake
     '(:eval (when (bound-and-true-p flymake-mode)
