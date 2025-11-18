@@ -58,7 +58,7 @@
       (let* ((sev (flymake--severity (flymake-diagnostic-type d)))
              (level (cond ((eq sev (flymake--severity :error)) 'error)
                           ((eq sev (flymake--severity :warning)) 'warning)
-                          (t 'note)))
+                          (t 'info)))
              (item (assq level flymake-counters-alist)))
         (if item
             (cl-incf (cdr item))
