@@ -63,10 +63,10 @@
 
 (defun lrd/flymake-make-indicator (type count face)
   (if count
-      (let* ((fm-icon-text `((error "\u2297" "times-circle")
+      (let* ((fm-ind-alist `((error "\u2297" "times-circle")
 			                (warning "\u26A0" "exclamation-triangle")
 			                (info "\u24d8" "info")))
-             (fm-indicators (cdr (assq type fm-icon-text)))
+             (fm-indicators (cdr (assq type fm-ind-alist)))
              (fm-icon-glyph (all-the-icons-faicon (cadr fm-indicators) :v-adjust 0.03))
              (fm-text (car fm-indicators)))
         (if (and (display-graphic-p) lrd/mode-line-fancy-icons)
@@ -87,7 +87,8 @@
                                    (lrd/flymake-make-indicator 'error .error 'flymake-error-echo)
                                    (lrd/flymake-make-indicator 'warning .warning 'flymake-warning-echo)
                                    (lrd/flymake-make-indicator 'info .info 'flymake-note-echo))
-                                  " ")))))
+                                  " ")
+                               (propertize ":)" 'face 'shadow)))))
                 text
                 ))))
 
