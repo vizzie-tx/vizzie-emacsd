@@ -1,4 +1,4 @@
-;;; config-modeline-new.el ---   -*- lexical-binding: t; -*-
+;;; config-modeline.el ---   -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Larry Daffner
 
@@ -65,7 +65,7 @@
   (if count
       (let* ((fm-ind-alist `((error "\u2297" "times-circle")
 			                (warning "\u26A0" "exclamation-triangle")
-			                (info "\u24d8" "info")))
+			                (info "\u24d8" "info-circle")))
              (fm-indicators (cdr (assq type fm-ind-alist)))
              (fm-icon-glyph (all-the-icons-faicon (cadr fm-indicators) :v-adjust 0.03))
              (fm-text (car fm-indicators)))
