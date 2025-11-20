@@ -123,7 +123,14 @@
             (t . (variable-pitch regular 1.1))))
     :config
     (require 'hl-line)
-    (add-hook 'ef-themes-post-load-hook 'lrd/theme-fix-background)
+    ;; If in daemon mode, do the fixup after we create a frame. Otherwise,
+    ;; we can fix it in the post-load hook
+    (if (daemonp)
+        (add-hook 'after-make-frame-functions
+                  (lambda (frame)
+                    (with-selected-frame frame
+                      (lrd/theme-fix-background))))
+      (add-hook 'ef-themes-post-load-hook 'lrd/theme-fix-background))
     ;; Themes with potential...
     ;; (ef-themes-select 'ef-dark)
     (ef-themes-select 'ef-symbiosis)
