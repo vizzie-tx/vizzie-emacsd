@@ -25,6 +25,16 @@
 			     "/usr/local/lib/node_modules/typescript/lib"
 			     "--ngProbeLocations"
 			     "/usr/local/lib/node_modules/@angular/language-server/bin"))
+  (setq-default
+   eglot-workspace-configuration
+   '( :basedpyright
+      ( :typeCheckingMode "recommended")
+      :basedpyright.analysis
+      ( :diagnosticSeverityOverrides
+        (:reportExplicitAny "information")
+        )
+      )
+   )
   :bind
   (:map eglot-mode-map
         ("C-c r" . 'eglot-rename)
