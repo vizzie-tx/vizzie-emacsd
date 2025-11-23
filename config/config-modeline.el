@@ -111,6 +111,7 @@
               mode-name
               "   "
               lrd/mode-line-flymake
+              (eglot--managed-mode (" [" eglot--mode-line-format "] "))
               mode-line-format-right-align
               (vc-mode vc-mode)
               " "
