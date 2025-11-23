@@ -133,11 +133,11 @@
       (add-hook 'ef-themes-post-load-hook 'lrd/theme-fix-background))
     ;; Themes with potential...
     ;; (ef-themes-select 'ef-dark)
-    (ef-themes-select 'ef-symbiosis)
-    ;; (ef-themes-select 'ef-duo-dark)
-    ;; (ef-themes-select 'ef-trio-dark)
-    ;; (ef-themes-select 'ef-maris-dark)
-    ;; (ef-themes-select 'ef-cherie)
+    (ef-themes-load-theme 'ef-symbiosis)
+    ;; (ef-themes-load-theme 'ef-duo-dark)
+    ;; (ef-themes-load-theme 'ef-trio-dark)
+    ;; (ef-themes-load-theme 'ef-maris-dark)
+    ;; (ef-themes-load-theme 'ef-cherie)
     )
   )
 
