@@ -58,7 +58,9 @@
   (:map flymake-mode-map
    ("M-n" . 'flymake-goto-next-error)
    ("M-p" . 'flymake-goto-prev-error))
-  :config (setq flymake-mode-line-format nil)
+  :config
+  (setq flymake-mode-line-format nil)
+  (setq flymake-wrap-around t)
   )
 
 (defun lrd/flymake-count-errors ()
