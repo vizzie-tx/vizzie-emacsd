@@ -60,7 +60,7 @@
 (defvar lrd/mode-line-client
   '(:eval (cond
            ((not buffer-file-name) "*")
-           ((and (bound-and-true-p 'server-buffer-clients)
+           ((and (bound-and-true-p server-buffer-clients)
                 (file-remote-p buffer-file-name)) "")
            ((bound-and-true-p server-buffer-clients) "^")
            ((file-remote-p buffer-file-name) "@")
