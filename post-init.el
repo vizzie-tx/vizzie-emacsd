@@ -15,11 +15,9 @@
    (defun +resize-after-make-frame (frame)
      "HACK Resize new frames shortly after creation.  Works around 
 https://debbugs.gnu.org/cgi/bugreport.cgi?bug=67654"
-     (let ((width (/ (frame-text-width frame) (frame-char-width frame)))
-           (height (/ (frame-text-height frame) (frame-char-height 
-frame))))
-       (sleep-for 0 1)
-       (set-frame-size frame width height))))
+     (when-let ((width (alist-get 'width default-frame-alist))
+                (height (alist-get 'height default-frame-alist)))
+       (run-with-timer (/ 1.0 60) nil #'set-frame-size frame width height))))
 
 (setq help-window-select t)
 

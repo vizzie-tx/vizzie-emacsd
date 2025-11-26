@@ -6,5 +6,9 @@
 
 (add-to-list 'load-path lrd/configs-directory)
 
+;; WHY? gtk-emacs decided that 10x20 is a good default size
+(add-to-list 'default-frame-alist '(width . 80))
+(add-to-list 'default-frame-alist '(height . 34))
+
 (provide 'pre-early-init)
 ;; pre-early-init.el ends here
