@@ -14,8 +14,8 @@
 (setq custom-safe-themes t)
 
 ;;;;; Select a theme family
+;(defvar lrd/theme-family 'ef)
 (defvar lrd/theme-family 'ef)
-;(defvar lrd/theme-family 'modus)
 
 ;;;; Helper functions
 ;; On 256-color terminals, tty-color-approximate aggressively shuns
@@ -82,24 +82,21 @@
   :defines modus-themes-mode-line modus-themes-paren-match modus-themes-region
   :init
   (setq modus-themes-bold-constructs t
-	modus-themes-disable-other-themes t
-	modus-themes-common-palette-overrides
-	'(;; See https://protesilaos.com/emacs/modus-themes#h:df1199d8-eaba-47db-805d-6b568a577bf3
-	  ;; Make the mode line borderless
-	  (border-mode-line-active unspecified)
+	    modus-themes-disable-other-themes t
+	    modus-themes-common-palette-overrides
+	    '(;; See https://protesilaos.com/emacs/modus-themes#h:df1199d8-eaba-47db-805d-6b568a577bf3
+	      ;; Make the mode line borderless
+	      (border-mode-line-active unspecified)
           (border-mode-line-inactive unspecified)
-	  ;; Allow font-lock to work in the region
-	  (fg-region unspecified)
-	  ;; More intense, underlined paren matches
-	  (bg-paren-match bg-cyan-intense)
-	  (underline-paren-match fg-main)
-	  ;; Faint yellow comments and green for strings
-	  (comment yellow-faint)
-          (string green-warmer)
-	  )
-	)
+	      ;; Allow font-lock to work in the region
+	      (fg-region unspecified)
+	      ;; More intense, underlined paren matches
+	      (bg-paren-match bg-cyan-intense)
+	      (underline-paren-match fg-main)
+	      )
+	    )
   :config
-  (load-theme 'modus-vivendi)
+  (modus-themes-load-theme 'modus-vivendi)
   )
   )
 
@@ -110,17 +107,32 @@
     :init
     (setq ef-themes-disable-other-themes t)
     (setq ef-themes-headings ; read the manual's entry or the doc string
-          '((0 . (variable-pitch light 1.9))
-            (1 . (variable-pitch light 1.8))
-            (2 . (variable-pitch light 1.7))
-            (3 . (variable-pitch semilight 1.6))
-            (4 . (variable-pitch semilight 1.5))
-            (5 . (variable-pitch regular 1.4))
-            (6 . (variable-pitch regular 1.3))
-            (7 . (variable-pitch regular 1.2))    ; absence of weight means `bold'
+          '((0 . (fixed-pitch light 1.9))
+            (1 . (fixed-pitch light 1.8))
+            (2 . (fixed-pitch light 1.7))
+            (3 . (fixed-pitch semilight 1.6))
+            (4 . (fixed-pitch semilight 1.5))
+            (5 . (fixed-pitch regular 1.4))
+            (6 . (fixed-pitch regular 1.3))
+            (7 . (fixed-pitch regular 1.2))    ; absence of weight means `bold'
             (agenda-date . (semilight 1.5))
             (agenda-structure . (variable-pitch light 1.9))
-            (t . (variable-pitch regular 1.1))))
+            (t . (variable-pitch regular 1.1)))
+          modus-themes-bold-constructs t
+          modus-themes-italic-constructs t
+          modus-themes-common-palette-overrides
+          '(
+	        ;; Make the mode line borderless
+	        (border-mode-line-active unspecified)
+            (border-mode-line-inactive unspecified)
+	        ;; Allow font-lock to work in the region
+	        (fg-region unspecified)
+	        ;; More intense, underlined paren matches
+	        (bg-paren-match bg-cyan-intense)
+	        (underline-paren-match fg-main)
+            )
+          )
+    
     :config
     (require 'hl-line)
     ;; If in daemon mode, do the fixup after we create a frame. Otherwise,
@@ -133,9 +145,9 @@
       (add-hook 'ef-themes-post-load-hook 'lrd/theme-fix-background))
     ;; Themes with potential...
     ;; (ef-themes-select 'ef-dark)
-    (ef-themes-load-theme 'ef-symbiosis)
+    ;; (ef-themes-load-theme 'ef-symbiosis)
     ;; (ef-themes-load-theme 'ef-duo-dark)
-    ;; (ef-themes-load-theme 'ef-trio-dark)
+    (ef-themes-load-theme 'ef-trio-dark)
     ;; (ef-themes-load-theme 'ef-maris-dark)
     ;; (ef-themes-load-theme 'ef-cherie)
     )
