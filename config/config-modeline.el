@@ -19,14 +19,35 @@
 
 ;;; Faces:
 (make-face 'lrd/mode-line-modified-face)
-(set-face-attribute 'lrd/mode-line-modified-face nil
-                    :inherit 'dired-marked :weight 'bold)
 (make-face 'lrd/mode-line-read-only-face)
-(set-face-attribute 'lrd/mode-line-read-only-face nil
-                    :inherit 'dired-flagged :weight 'bold)
+(make-face 'lrd/mode-line-error-face)
 (make-face 'lrd/mode-line-warning-face)
-(set-face-attribute 'lrd/mode-line-warning-face nil :inherit 'warning :weight 'bold)
+(make-face 'lrd/mode-line-note-face)
 
+(cond ((and (boundp 'lrd/theme-family) (eq lrd/theme-family 'ef))
+       (ef-themes-with-colors
+         (set-face-attribute 'lrd/mode-line-modified-face nil
+                             :weight 'bold :foreground fg-changed)
+         (set-face-attribute 'lrd/mode-line-read-only-face nil
+                             :weight 'bold :foreground fg-mark-delete
+                             :inverse-video t)
+         (set-face-attribute 'lrd/mode-line-error-face nil
+                             :weight 'bold :foreground fg-prominent-err)
+         (set-face-attribute 'lrd/mode-line-warning-face nil
+                             :weight 'bold :foreground fg-prominent-warning)
+         (set-face-attribute 'lrd/mode-line-note-face nil
+                             :weight 'bold :foreground fg-prominent-note)))
+      (t 
+       (set-face-attribute 'lrd/mode-line-modified-face nil
+                           :inherit 'dired-marked :weight 'bold)
+       (set-face-attribute 'lrd/mode-line-read-only-face nil
+                           :inherit 'dired-flagged :weight 'bold)
+       (set-face-attribute 'lrd/mode-line-error-face nil
+                           :inherit 'flymake-error-echo :weight 'bold)
+       (set-face-attribute 'lrd/mode-line-warning-face nil
+                           :inherit 'flymake-warning-echo :weight 'bold)
+       (set-face-attribute 'lrd/mode-line-note-face nil
+                           :inherit 'flymake-note-echo :weight 'bold)))
 ;;; Components:
 (defvar-local lrd/mode-line-modified
     '(:eval (cond
@@ -39,9 +60,9 @@
 (defvar lrd/mode-line-client
   '(:eval (cond
            ((not buffer-file-name) "*")
-           ((and server-buffer-clients
+           ((and (bound-and-true-p 'server-buffer-clients)
                 (file-remote-p buffer-file-name)) "")
-           (server-buffer-clients "^")
+           ((bound-and-true-p server-buffer-clients) "^")
            ((file-remote-p buffer-file-name) "@")
            (t " "))))
 
