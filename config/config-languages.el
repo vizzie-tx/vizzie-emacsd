@@ -35,6 +35,7 @@
         )
       )
    )
+  (set-face-attribute 'eglot-inlay-hint-face nil :family "Monaspace Radon Frozen")
   :bind
   (:map eglot-mode-map
         ("C-c r" . 'eglot-rename)
