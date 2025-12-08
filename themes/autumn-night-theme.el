@@ -49,7 +49,8 @@
    `(menu ((,class (:foreground ,(autumn-get-color my_white1) :background ,(autumn-get-color my_gray2)))))
    `(region ((,class (:background ,(autumn-get-color my_gray3)))))
 
-   `(mode-line-active ((,class (:background ,(autumn-get-color my_gray7) :background ,(autumn-get-color my_gray2)))))
+   `(mode-line ((,class (:foreground ,(autumn-get-color my_gray7) :background ,(autumn-get-color my_gray2)))))
+   `(mode-line-active ((,class (:foreground ,(autumn-get-color my_gray7) :background ,(autumn-get-color my_gray2)))))
    `(mode-line-inactive ((,class (:foreground ,(autumn-get-color my_gray5) :background ,(autumn-get-color my_gray2)))))
    
    `(hl-line ((,class (:background ,(autumn-get-color my_gray3)))))

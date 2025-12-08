@@ -49,7 +49,8 @@
    `(menu ((,class (:foreground ,(autumn-get-color my_white1) :background ,(autumn-get-color my_gray2)))))
    `(region ((,class (:background ,(autumn-get-color my_gray3)))))
 
-   `(mode-line ((,class (:background ,(autumn-get-color my_gray7) :background ,(autumn-get-color my_gray2)))))
+   `(mode-line ((,class (:foreground ,(autumn-get-color my_gray7) :background ,(autumn-get-color my_gray2)))))
+   `(mode-line-active ((,class (:foreground ,(autumn-get-color my_gray7) :background ,(autumn-get-color my_gray2)))))
    `(mode-line-inactive ((,class (:foreground ,(autumn-get-color my_gray5) :background ,(autumn-get-color my_gray2)))))
 
    `(hl-line ((,class (:background ,(autumn-get-color my_gray3)))))
@@ -73,17 +74,20 @@
 
    `(font-lock-builtin-face ((,class (:foreground ,(autumn-get-color my_white3)))))
    `(font-lock-comment-face ((,class (:foreground ,(autumn-get-color my_gray5)))))
+   `(font-lock-property-name-face ((,class (:foreground ,(autumn-get-color my_turquoise1)))))
    `(font-lock-property-use-face ((,class (:foreground ,(autumn-get-color my_turquoise1)))))
    `(font-lock-comment-face ((,class (:foreground ,(autumn-get-color my_gray5)))))
    `(font-lock-constant-face ((,class (:foreground ,(autumn-get-color my_white3)))))
    `(font-lock-escape-face ((,class (:foreground ,(autumn-get-color my_turquoise1)))))
+   `(font-lock-function-call-face ((,class (:foreground ,(autumn-get-color my_yellow1)))))
    `(font-lock-function-name-face ((,class (:foreground ,(autumn-get-color my_yellow1)))))
    `(font-lock-keyword-face ((,class (:foreground ,(autumn-get-color my_red)))))
    `(font-lock-operator-face ((,class (:foreground ,(autumn-get-color my_white1)))))
    `(font-lock-string-face ((,class (:foreground ,(autumn-get-color my_green)))))
    `(font-lock-type-face ((,class (:foreground ,(autumn-get-color my_white3) :italic t))))
    `(font-lock-variable-name-face ((,class (:foreground ,(autumn-get-color my_white3)))))
-
+   `(font-lock-number-face ((,class (:foreground ,(autumn-get-color my_turquoise1)))))
+   
    `(diff-added ((,class (:foreground ,(autumn-get-color my_green)))))
    `(diff-removed ((,class (:foreground ,(autumn-get-color my_red)))))
    `(diff-changed ((,class (:foreground ,(autumn-get-color my_gray5)))))
