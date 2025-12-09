@@ -90,3 +90,4 @@
    `(diff-changed ((,class (:foreground ,(autumn-get-color my_gray5)))))
    ))
 
+(provide-theme 'autumn-night)
