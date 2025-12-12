@@ -58,8 +58,8 @@
   :functions flymake-goto-next-error flymake-goto-prev-error
   :bind
   (:map flymake-mode-map
-   ("M-n" . 'flymake-goto-next-error)
-   ("M-p" . 'flymake-goto-prev-error))
+        ("M-n" . 'flymake-goto-next-error)
+        ("M-p" . 'flymake-goto-prev-error))
   :config
   (setq flymake-mode-line-format nil)
   (setq flymake-wrap-around t)
@@ -79,27 +79,7 @@
           (push (cons level 1) flymake-counters-alist))))
     flymake-counters-alist))
 
-
 ;; Languages: angular, typescript, html, css, javascript, java, rust?
-;; Web-mode: Enhanced HTML mode that can handle embedded javascript and CSS sensibly
-(use-package web-mode
-  :mode
-  (("\\.phtml\\'" . web-mode)
-   ("\\.php\\'" . web-mode)
-   ("\\.tpl\\'" . web-mode)
-   ("\\.[agj]sp\\'" . web-mode)
-   ("\\.as[cp]x\\'" . web-mode)
-   ("\\.erb\\'" . web-mode)
-   ("\\.mustache\\'" . web-mode)
-   ("\\.djhtml\\'" . web-mode)
-   ("\\.x?html?\\'" . web-mode))
-  :bind
-  (:map web-mode-map
-        ("C-c /" . web-mode-element-close)
-        )
-  :config
-  (customize-set-variable 'web-mode-enable-css-colorization t)
-  (customize-set-variable 'web-mode-enable-auto-pairing t))
 
 ;; javascript
 (use-package js)
@@ -115,6 +95,24 @@
   (c-mode-common . eglot-ensure)
   )
 
+(use-package c-ts-mode
+  :init
+  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+  :config
+  (setq c-ts-mode-indent-style 'linux)
+  (setq c-ts-mode-indent-offset 4)
+  :hook
+  (c-ts-mode . eglot-ensure)
+  (c++-ts-mode . eglot-ensure)
+  )
+
+(use-package java-ts-mode
+  :init
+  (add-to-list 'major-mode-remap-alist '(java-mode . java-ts-mode))
+  :hook
+  (java-ts-mode . eglot-ensure)
+  )
+
 ;; Typescript. Use the typescript lsp with eglot.
 (use-package typescript-mode
   :after eglot
@@ -128,22 +126,11 @@
 ;; typescript component files are handled capably by the pre-configured
 ;; typescript LSP.
 (use-package ng2-mode
+  :after web-mode
   :hook
   (ng2-ts-mode . eglot-ensure)
   (ng2-html-mode . eglot-ensure)
   )
-
-;; Fix the order of ng2-mode and web-mode so that Angular gets first crack
-;; at handling its files
-(defun lrd/ngmode-p (cell)
-  "Is the cons cell an ng2-mode alist element"
-  (or (eq (cdr cell) 'ng2-html-mode)
-      (eq (cdr cell) 'ng2-ts-mode)))
-
-(setq auto-mode-alist (let ((ngmodes
-                             (seq-filter 'lrd/ngmode-p auto-mode-alist)))
-                        (append ngmodes
-                                (seq-remove 'lrd/ngmode-p auto-mode-alist))))
 
 ;;;;; Python
 ;;;;;; Basic Setup
@@ -156,7 +143,8 @@
   (setq python-interpreter "python3")
   :hook
   (python-mode . eglot-ensure)
-)
+  (python-ts-mode . eglot-ensure)
+  )
 
 
 ;;;;;;
@@ -173,6 +161,7 @@
   (setq poetry-tracking-strategy 'switch-buffer)
   :hook
   (python-mode . poetry-tracking-mode)
+  (python-ts-mode . poetry-tracking-mode)
   )
 
 ;;;;; Emacs Lisp
@@ -193,5 +182,22 @@
                                 :cargo ( :buildScripts (:enable t)
                                          :features "all"))))))
 
+;;;;; Javascript
+(use-package js-mode
+  :ensure nil
+  :hook
+  (js-mode . eglot-ensure)
+  (js-ts-mode . eglot-ensure)
+  )
+
+;;;; Remap some languages to use appropriate -ts mode
+(dolist (setting '((javascript-mode . js-ts-mode)
+                   (python-mode . python-ts-mode)
+                   (typescript-mode . typescript-ts-mode)
+                   (json-mode . json-ts-mode)
+                   (css-mode . css-ts-mode)))
+                 (add-to-list 'major-mode-remap-alist setting))
+
+  
 (provide 'config-languages)
 ;; config-languages.el ends here
