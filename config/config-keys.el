@@ -18,14 +18,11 @@
 
 ;; Set up a personal prefix on "C-x c" for useful shortcuts
 (define-prefix-command 'lrd/personal-map)
-
+ 
 (define-key 'lrd/personal-map (kbd "SPC") #'just-one-space)
 (define-key 'lrd/personal-map (kbd "l") #'lrd/toggle-window-dedicated)
-;;(define-key 'lrd/personal-map (kbd "t") #'lrd/neotree-smart-show)
 (define-key 'lrd/personal-map (kbd "v") #'vterm)
-;;(define-key 'lrd/personal-map (kbd "t") 'table-insert)
-;;(define-key 'lrd/personal-map (kbd "r") 'table-insert-row)
-;;(define-key 'lrd/personal-map (kbd "c") 'table-insert-column)
+(define-key 'lrd/personal-map (kbd "m") #'mc/mark-all-dwim)
 
 (use-package emacs
   :ensure nil
@@ -41,7 +38,7 @@
   )
 
 ;; Set up prefix for personal bindings on an unused key
-(global-set-key (kbd "C-x c") 'lrd/personal-map)
+(global-set-key (kbd "C-c l") 'lrd/personal-map)
 
 ;; For reference:
 ;; C-t is bound to transpose-chars
