@@ -15,16 +15,16 @@
 (use-package eglot
   :ensure t
   :config
-  (add-to-list 'eglot-server-programs
-               '((python-mode python-ts-mode)
-                 "basedpyright-langserver" "--stdio")
-               '(ng2-html-mode
-                 "ngserver"
-                 "--stdio"
-			     "--tsProbeLocations"
-			     "/usr/local/lib/node_modules/typescript/lib"
-			     "--ngProbeLocations"
-			     "/usr/local/lib/node_modules/@angular/language-server/bin"))
+  (dolist (cfg '(((python-mode python-ts-mode)
+                  "rass" "python")
+                 '(ng2-html-mode
+                   "ngserver"
+                   "--stdio"
+			       "--tsProbeLocations"
+			       "/usr/local/lib/node_modules/typescript/lib"
+			       "--ngProbeLocations"
+			       "/usr/local/lib/node_modules/@angular/language-server/bin")))
+    (add-to-list 'eglot-server-programs cfg))
   (setq-default
    eglot-workspace-configuration
    '( :basedpyright
@@ -81,9 +81,6 @@
 
 ;; Languages: angular, typescript, html, css, javascript, java, rust?
 
-;; javascript
-(use-package js)
-
 ;; All C-like languages, java, C, C++. Make sure we use eglot
 (use-package cc-mode
   :config
@@ -98,6 +95,7 @@
 (use-package c-ts-mode
   :init
   (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c++-mode c++-ts-mode))
   :config
   (setq c-ts-mode-indent-style 'linux)
   (setq c-ts-mode-indent-offset 4)
@@ -116,6 +114,8 @@
 ;; Typescript. Use the typescript lsp with eglot.
 (use-package typescript-mode
   :after eglot
+  :init
+  (add-to-list 'major-mode-remap-alist '(typescript-mode . typescript-ts-mode))
   :hook
   (typescript-mode . eglot-ensure)
   (typescript-ts-mode . eglot-ensure)
@@ -136,6 +136,8 @@
 ;;;;;; Basic Setup
 (use-package python
   :after eglot
+  :init
+  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
   :config
   ;; Remove guess indent python message
   (setq python-indent-guess-indent-offset-verbose nil)
@@ -183,8 +185,11 @@
                                          :features "all"))))))
 
 ;;;;; Javascript
-(use-package js-mode
+(use-package js
   :ensure nil
+  :init
+  (add-to-list 'major-mode-remap-alist '(javascript-mode . js-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(js-mode . js-ts-mode))
   :hook
   (js-mode . eglot-ensure)
   (js-ts-mode . eglot-ensure)
@@ -192,12 +197,10 @@
 
 ;;;; Remap some languages to use appropriate -ts mode
 (dolist (setting '((javascript-mode . js-ts-mode)
-                   (python-mode . python-ts-mode)
-                   (typescript-mode . typescript-ts-mode)
                    (json-mode . json-ts-mode)
                    (css-mode . css-ts-mode)))
-                 (add-to-list 'major-mode-remap-alist setting))
+  (add-to-list 'major-mode-remap-alist setting))
 
-  
+
 (provide 'config-languages)
 ;; config-languages.el ends here
