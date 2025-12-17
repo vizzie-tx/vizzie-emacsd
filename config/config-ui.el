@@ -9,6 +9,9 @@
 ;; 
 ;; Code:
 
+;; When killing a line, take the newline with it
+(setq kill-whole-line t)
+
 ;; Delight - diminish minor modes
 (use-package delight
   :init
