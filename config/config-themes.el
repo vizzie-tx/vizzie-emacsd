@@ -1,4 +1,4 @@
-;;;config-themes.el --- Theme-related configuration  -*- lexical-binding: t; -*-
+;;;config-themes.el --- Theme-related configuration -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2024 Larry Daffner
 
@@ -13,56 +13,43 @@
 ;;;;; Mark all themes as safe
 (setq custom-safe-themes t)
 
-;;;;; Select a theme family
-;(defvar lrd/theme-family 'ef)
+;;;;; Select a theme
+;;(defvar lrd/theme-family 'ef)
 (defvar lrd/theme-family 'ef)
 
 ;;;; Helper functions
 ;; On 256-color terminals, tty-color-approximate aggressively shuns
 ;; grayscale values, which is bad for background colors. Fix that here.
-
 (defun lrd/grayscale (color)
   "Given a color, return the closest gray"
   (let ((val (/ (apply '+ (tty-color-standard-values color)) (* 3 256))))
     (format "#%02x%02x%02x" val val val)))
 
-(defun lrd/get-theme-spec (theme face)
-  "Gretrieve the current spec in theme for a face"
-  (let ((oldspec (assq theme (get face 'theme-face))))
-    (cadr oldspec)))
-
-(defun lrd/filter-spec (spec)
-  "Filter out the restricted color stanza from a spec"
-  (seq-filter (lambda (elt)
-                (not (equal '((min-colors 88)) (car elt)))) spec))
+(defun lrd/get-face-background (face)
+  (let (background)
+    (dolist (elt (reverse (get 'default 'theme-face)))
+      (and (not (eq (car elt) 'user))
+           (let ((tail (cadr elt)))
+             (while tail
+               (let* ((entry (pop tail))
+                      (display (car entry))
+                      (attrs (cdr entry)))
+                 (and (plist-get attrs :background)
+                      (setq background (plist-get attrs :background))))))))
+    background))
 
 (defun lrd/theme-fix-background ()
-  "set backgrounds to the closest grayscale on text terminals"
-  (let* ((bg-fix `((((min-colors 257))
-                    :background ,(face-attribute
-                                  'default :background))
-                   (((min-colors 88))
-                    :background ,(lrd/grayscale
-                                  (face-attribute
-                                   'default :background)))))
-         (hl-fix `((((min-colors 257))
-                    :background ,(face-attribute 'hl-line :background))
-                   (((min-colors 88))
-                    :background ,(lrd/grayscale
-                                  (face-attribute
-                                   'hl-line :background))))))
-    (message "Fixing background colors...")
-    (custom-push-theme 'theme-face 'default 'user 'set
-                       (append (lrd/filter-spec
-                                (lrd/get-theme-spec 'user 'default))
-                               bg-fix))
-    (custom-theme-recalc-face 'default)
-    ;; this face may not exist
-    (and (facep 'hl-line)
-         (custom-push-theme 'theme-face 'hl-line 'user 'set
-                            (append (lrd/filter-spec
-                                     (lrd/get-theme-spec 'user 'hl-line))
-                                    hl-fix))
+  (let ((default-bg (lrd/get-face-background 'default))
+        (hl-bg (lrd/get-face-background 'hl-line)))
+    (and default-bg
+         (custom-theme-set-faces
+          'user
+          `(default ((((type tty)) . (:background ,(lrd/grayscale default-bg))))))
+         (custom-theme-recalc-face 'default))
+    (and hl-bg
+         (custom-theme-set-faces
+          'user
+          `(hl-line ((((type tty)) . (:background ,(lrd/grayscale hl-bg))))))
          (custom-theme-recalc-face 'hl-line))))
 
 ;;;; Other colorful stuff
@@ -78,26 +65,26 @@
 ;;;; Modus-themes: Standard
 (when (eq lrd/theme-family 'modus)
   (use-package modus-themes
-  :ensure t
-  :defines modus-themes-mode-line modus-themes-paren-match modus-themes-region
-  :init
-  (setq modus-themes-bold-constructs t
-	    modus-themes-disable-other-themes t
-	    modus-themes-common-palette-overrides
-	    '(;; See https://protesilaos.com/emacs/modus-themes#h:df1199d8-eaba-47db-805d-6b568a577bf3
-	      ;; Make the mode line borderless
-	      (border-mode-line-active unspecified)
-          (border-mode-line-inactive unspecified)
-	      ;; Allow font-lock to work in the region
-	      (fg-region unspecified)
-	      ;; More intense, underlined paren matches
-	      (bg-paren-match bg-cyan-intense)
-	      (underline-paren-match fg-main)
+    :ensure t
+    :defines modus-themes-mode-line modus-themes-paren-match modus-themes-region
+    :init
+    (setq modus-themes-bold-constructs t
+	      modus-themes-disable-other-themes t
+	      modus-themes-common-palette-overrides
+	      '(;; See https://protesilaos.com/emacs/modus-themes#h:df1199d8-eaba-47db-805d-6b568a577bf3
+	        ;; Make the mode line borderless
+	        (border-mode-line-active unspecified)
+            (border-mode-line-inactive unspecified)
+	        ;; Allow font-lock to work in the region
+	        (fg-region unspecified)
+	        ;; More intense, underlined paren matches
+	        (bg-paren-match bg-cyan-intense)
+	        (underline-paren-match fg-main)
+	        )
 	      )
-	    )
-  :config
-  (modus-themes-load-theme 'modus-vivendi)
-  )
+    :config
+    (modus-themes-load-theme 'modus-vivendi)
+    )
   )
 
 ;;;; Alternate: EF themes
@@ -135,21 +122,17 @@
     
     :config
     (require 'hl-line)
-    ;; If in daemon mode, do the fixup after we create a frame. Otherwise,
-    ;; we can fix it in the post-load hook
-    (if (daemonp)
-        (add-hook 'after-make-frame-functions
-                  (lambda (frame)
-                    (with-selected-frame frame
-                      (lrd/theme-fix-background))))
-      (add-hook 'ef-themes-post-load-hook 'lrd/theme-fix-background))
+    (add-hook 'modus-themes-post-load-hook 'lrd/theme-fix-background)
     ;; Themes with potential...
     ;; (ef-themes-select 'ef-dark)
     ;; (ef-themes-load-theme 'ef-symbiosis)
     ;; (ef-themes-load-theme 'ef-duo-dark)
-    (ef-themes-load-theme 'ef-trio-dark)
+    ;; (ef-themes-load-theme 'ef-trio-dark)
     ;; (ef-themes-load-theme 'ef-maris-dark)
     ;; (ef-themes-load-theme 'ef-cherie)
+    ;; (ef-themes-load-theme 'ef-winter)
+    (ef-themes-load-theme 'ef-autumn)
+    
     )
   )
 
