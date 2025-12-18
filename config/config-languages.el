@@ -94,6 +94,9 @@
 
 (use-package c-ts-mode
   :init
+  (add-to-list 'auto-mode-alist
+               '("\\(\\.ii\\|\\.\\(CC?\\|HH?\\)\\|\\.[ch]\\(pp\\|xx\\|\\+\\+\\)\\|\\.\\(cc\\|hh\\)\\)\\'"
+                 . c++-ts-mode))
   (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
   (add-to-list 'major-mode-remap-alist '(c++-mode c++-ts-mode))
   :config
