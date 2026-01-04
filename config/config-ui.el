@@ -77,6 +77,8 @@
 ;; Ain't nobody got time for that
 (fset 'yes-or-no-p 'y-or-n-p) ; less typing
 
+(setq show-paren-context-when-offscreen 'overlay)
+
 ;; Nifty trick; highlight region when saving to kill-ring
 (defun lrd/pulse-current-region (&rest _)
   "Pulse the current implicit or active region"
