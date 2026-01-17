@@ -70,7 +70,7 @@
 			       "/usr/local/lib/node_modules/typescript/lib"
 			       "--ngProbeLocations"
 			       "/usr/local/lib/node_modules/@angular/language-server/bin")
-                 (text-mode . ("harper.harper-ls" "--stdio"))
+                 (text-mode . ("harper-ls" "--stdio"))
                  ))
     (add-to-list 'eglot-server-programs cfg))
   (setq-default
