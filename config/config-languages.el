@@ -9,32 +9,80 @@
 ;; 
 ;; Code:
 
+;; configure python lsp server
+(defvar lrd/python-lang-server 'rass)
+(setq lrd/python-lang-server 'basedrass)
+;; (setq lrd/python-lang-server 'basedpyright)
+
+
 ;;; Higher-order packages
 ;;;
+
+;; Detect some additional project roots
+(load-library "project-rootfile.el")
+(add-hook 'project-find-functions 'project-rootfile-try-detect)
+
+(defvar lrd/project-compilation-alist
+  '(("pyproject.toml" . "python3 -m build")
+    ("uv.lock" . "uv build")
+    ("poetry.lock" . "poetry build")
+    ("build.xml" . "ant")
+    ("angular.json" . "ng build")))
+
+(defun lrd/build-command ()
+  (let ((dir (project-root (project-current)))
+        project-compile-command)
+    (dolist (pair lrd/project-compilation-alist)
+      (let ((file (car pair))
+            (cmd (cdr pair)))
+        (and (file-exists-p (file-name-concat dir file))
+             (setq project-compile-command cmd))))
+    project-compile-command))
+
+(defadvice project-compile
+    (before project-set-compile-command activate)
+  "Configure project compile commands based on file existence"
+  (let ((pcc (lrd/build-command)))
+    (and pcc (setq-local compile-command pcc))))
+
+
+
+(defun lrd/get-python-lsp-command ()
+  (pcase lrd/python-lang-server
+    ('ty '("ty" "server"))
+    ('rass '("rass" "python"))
+    ('basedrass '("rass" "basedruff"))
+    ('basedpyright '("basedpyright-langserver" "--stdio"
+                     :initializationOptions
+                     (:basedpyright
+                      (:typeCheckingMode: "strict"))))))
+         
 ;; eglot - Connect to LSP server for all the goodies it has
 (use-package eglot
   :ensure t
   :config
   (dolist (cfg '(((python-mode python-ts-mode)
-                  "rass" "python")
-                 '(ng2-html-mode
+                  . (lambda (&rest _) (lrd/get-python-lsp-command)))
+                 (ng2-html-mode
                    "ngserver"
                    "--stdio"
 			       "--tsProbeLocations"
 			       "/usr/local/lib/node_modules/typescript/lib"
 			       "--ngProbeLocations"
-			       "/usr/local/lib/node_modules/@angular/language-server/bin")))
+			       "/usr/local/lib/node_modules/@angular/language-server/bin")
+                 (text-mode . ("harper.harper-ls" "--stdio"))
+                 ))
     (add-to-list 'eglot-server-programs cfg))
   (setq-default
    eglot-workspace-configuration
    '( :basedpyright
-      ( :typeCheckingMode "recommended")
-      :basedpyright.analysis
-      ( :diagnosticSeverityOverrides
-        (:reportExplicitAny "information")
+      ( :typeCheckingMode "recommended"
+        :analysis
+        ( :diagnosticSeverityOverrides
+          (:reportExplicitAny "information")
         )
       )
-   )
+   ))
   (dolist (face '(eglot-inlay-hint-face eglot-parameter-hint-face eglot-type-hint-face))
     (set-face-attribute face nil :family "Monaspace Radon Frozen"))
   :bind
