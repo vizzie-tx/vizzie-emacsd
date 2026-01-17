@@ -459,7 +459,7 @@
 (setq eglot-extend-to-xref t)
 
 ;; Eglot optimization
-(if minimal-emacs-debug
+(if (or minimal-emacs-debug t)
     (setq eglot-events-buffer-config '(:size 2000000 :format full))
   ;; This reduces log clutter to improves performance.
   (setq jsonrpc-event-hook nil)
