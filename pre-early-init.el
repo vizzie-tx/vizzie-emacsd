@@ -4,7 +4,12 @@
   (expand-file-name "config/" user-emacs-directory)
   "Directory for modular configuration files")
 
+(defvar lrd/lisp-directory
+  (expand-file-name "lisp/" user-emacs-directory))
+
 (add-to-list 'load-path lrd/configs-directory)
+(and (file-exists-p lrd/lisp-directory)
+     (add-to-list 'load-path lrd/lisp-directory))
 
 ;; WHY? gtk-emacs decided that 10x20 is a good default size
 (add-to-list 'default-frame-alist '(width . 80))
