@@ -21,7 +21,7 @@
 ;; Detect some additional project roots
 (load-library "project-rootfile.el")
 (add-hook 'project-find-functions 'project-rootfile-try-detect)
-
+  
 (defvar lrd/project-compilation-alist
   '(("pyproject.toml" . "python3 -m build")
     ("uv.lock" . "uv build")
@@ -39,13 +39,16 @@
              (setq project-compile-command cmd))))
     project-compile-command))
 
-(defadvice project-compile
-    (before project-set-compile-command activate)
-  "Configure project compile commands based on file existence"
-  (let ((pcc (lrd/build-command)))
-    (and pcc (setq-local compile-command pcc))))
-
-
+(use-package project
+  :ensure nil
+  :config
+  (setq project-vc-extra-root-markers
+        '("pyproject.toml" "pom.xml" "build.xml" "Cargo.toml" "build.gradle" "angular.json"))
+  (defadvice project-compile
+      (before project-set-compile-command activate)
+    "Configure project compile commands based on file existence"
+    (let ((pcc (lrd/build-command)))
+      (and pcc (setq-local compile-command pcc)))))
 
 (defun lrd/get-python-lsp-command ()
   (pcase lrd/python-lang-server
