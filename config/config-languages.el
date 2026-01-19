@@ -18,10 +18,6 @@
 ;;; Higher-order packages
 ;;;
 
-;; Detect some additional project roots
-(load-library "project-rootfile.el")
-(add-hook 'project-find-functions 'project-rootfile-try-detect)
-  
 (defvar lrd/project-compilation-alist
   '(("pyproject.toml" . "python3 -m build")
     ("uv.lock" . "uv build")
